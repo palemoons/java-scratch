@@ -1,4 +1,4 @@
-package datastructure;
+package datastructure.queue;
 
 public class LinkedQueue {
   class Node {

@@ -1,4 +1,4 @@
-package datastructure;
+package datastructure.list;
 
 public class LinkedList {
   // An inner class.

@@ -1,4 +1,4 @@
-package datastructure;
+package datastructure.list;
 
 public class SequentialList {
   // The maximal length of the list. Constant.

@@ -1,18 +1,18 @@
-package datastructure;
+package datastructure.queue;
 
-public class CircleIntQueue {
+public class CircleCharQueue {
   // Total space. One space can never be used.
   public static final int TOTAL_SPACE = 10;
   // The data.
-  int[] data;
+  char[] data;
   // The index for calculating the head.
   int head;
   // The index for calculating the tail.
   int tail;
 
   // Constructor.
-  public CircleIntQueue() {
-    data = new int[TOTAL_SPACE];
+  public CircleCharQueue() {
+    data = new char[TOTAL_SPACE];
     head = 0;
     tail = 0;
   }
@@ -22,7 +22,7 @@ public class CircleIntQueue {
    * 
    * @param paraValue The value of the new node.
    */
-  public void enqueue(int paraValue) {
+  public void enqueue(char paraValue) {
     if ((tail + 1) % TOTAL_SPACE == head) {
       System.out.println("Queue full.");
       return;
@@ -36,12 +36,12 @@ public class CircleIntQueue {
    * 
    * @return The value at the head.
    */
-  public int dequeue() {
+  public char dequeue() {
     if (head == tail) {
       System.out.println("No element in the queue.");
-      return -1;
+      return '\0';
     }
-    int resultValue = data[head % TOTAL_SPACE];
+    char resultValue = data[head % TOTAL_SPACE];
     head++;
     return resultValue;
   }
@@ -57,19 +57,22 @@ public class CircleIntQueue {
   }
 
   public static void main(String args[]) {
-    CircleIntQueue tempQueue = new CircleIntQueue();
+    CircleCharQueue tempQueue = new CircleCharQueue();
     System.out.println("Initalized, the list is: " + tempQueue.toString());
-
-    for (int i = 0; i < 5; i++) {
-      tempQueue.enqueue(i + 1);
-      System.out.println("Enqueue, the queue is: " + tempQueue.toString());
-    }
 
     int tempValue = tempQueue.dequeue();
     System.out.println("Dequeue " + tempValue + ", the queue is: " + tempQueue.toString());
 
-    for (int i = 0; i < 6; i++) {
-      tempQueue.enqueue(i + 10);
+    for (char i = '0'; i < '5'; i++) {
+      tempQueue.enqueue(i);
+      System.out.println("Enqueue, the queue is: " + tempQueue.toString());
+    }
+
+    tempValue = tempQueue.dequeue();
+    System.out.println("Dequeue, the queue is: " + tempQueue.toString());
+
+    for (char i = 'a'; i < 'f'; i++) {
+      tempQueue.enqueue(i);
       System.out.println("Enqueue, the queue is: " + tempQueue.toString());
     }
 
@@ -78,8 +81,8 @@ public class CircleIntQueue {
       System.out.println("Dequeue, the queue is: " + tempQueue.toString());
     }
 
-    for (int i = 0; i < 6; i++) {
-      tempQueue.enqueue(i + 100);
+    for (char i = 'A'; i < 'F'; i++) {
+      tempQueue.enqueue(i);
       System.out.println("Enqueue, the queue is: " + tempQueue.toString());
     }
   }

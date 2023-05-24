@@ -1,4 +1,4 @@
-package datastructure;
+package datastructure.stack;
 
 public class CharStack {
   // The max depth.
