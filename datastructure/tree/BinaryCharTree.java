@@ -3,6 +3,7 @@ package datastructure.tree;
 import java.util.Arrays;
 
 import datastructure.queue.*;
+import datastructure.stack.*;;
 
 public class BinaryCharTree {
   // The value in char.
@@ -245,6 +246,58 @@ public class BinaryCharTree {
     }
   }
 
+  // In-order visit with stack.
+  public void inOrderVisitWithStack() {
+    ObjectStack tempStack = new ObjectStack();
+    BinaryCharTree tempNode = this;
+    while (!tempStack.isEmpty() || tempNode != null) {
+      if (tempNode != null) {
+        tempStack.push(tempNode);
+        tempNode = tempNode.leftChild;
+      } else {
+        tempNode = (BinaryCharTree) tempStack.pop();
+        System.out.println("" + tempNode.value + " ");
+        tempNode = tempNode.rightChild;
+      }
+    }
+  }
+
+  // Pre-order visit with stack.
+  public void preOrderVisitWithStack() {
+    ObjectStack tempStack = new ObjectStack();
+    BinaryCharTree tempNode = this;
+    while (!tempStack.isEmpty() || tempNode != null) {
+      if (tempNode != null) {
+        System.out.println("" + tempNode.value + " ");
+        tempStack.push(tempNode);
+        tempNode = tempNode.leftChild;
+      } else {
+        tempNode = (BinaryCharTree) tempStack.pop();
+        tempNode = tempNode.rightChild;
+      }
+    }
+  }
+
+  // Post-order visit with stack.
+  public void postOrderVisitWithStack() {
+    ObjectStack tempStack = new ObjectStack();
+    BinaryCharTree tempNode = this;
+    ObjectStack tempOutputStack = new ObjectStack();
+    while (!tempStack.isEmpty() || tempNode != null) {
+      if (tempNode != null) {
+        tempOutputStack.push(new Character(tempNode.value));
+        tempStack.push(tempNode);
+        tempNode = tempNode.rightChild;
+      } else {
+        tempNode = (BinaryCharTree) tempStack.pop();
+        tempNode = tempNode.leftChild;
+      }
+    }
+    // Reverse output.
+    while (!tempOutputStack.isEmpty())
+      System.out.println("" + tempOutputStack.pop() + " ");
+  }
+
   public static void main(String args[]) {
     BinaryCharTree tempTree = manualContructTree();
     System.out.println("\r\nPre-order visit:");
@@ -275,5 +328,12 @@ public class BinaryCharTree {
     tempTree2.inOrderVisit();
     System.out.println("\r\nPost-order visit:");
     tempTree2.postOrderVisit();
+
+    System.out.println("\r\nIn-order visit with stack:");
+    tempTree2.inOrderVisitWithStack();
+    System.out.println("\r\nIn-order visit with stack:");
+    tempTree2.inOrderVisitWithStack();
+    System.out.println("\r\nPost-order visit with stack:");
+    tempTree2.postOrderVisitWithStack();
   }
 }
