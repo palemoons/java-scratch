@@ -1,4 +1,4 @@
-package graph;
+package datastructure.graph;
 
 import datastructure.queue.CircleObjectQueue;
 import datastructure.stack.ObjectStack;

@@ -1,4 +1,4 @@
-package graph;
+package datastructure.graph;
 
 import java.util.Arrays;
 

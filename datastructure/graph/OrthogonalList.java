@@ -1,4 +1,4 @@
-package graph;
+package datastructure.graph;
 
 public class OrthogonalList {
   // Inner class for adjacent node.

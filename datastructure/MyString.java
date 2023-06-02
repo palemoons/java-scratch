@@ -24,10 +24,10 @@ public class MyString {
 
   // Overrides toString method.
   public String toString() {
-    String resulString = "";
+    String resultString = "";
     for (int i = 0; i < length; i++)
-      resulString += data[i];
-    return resulString;
+      resultString += data[i];
+    return resultString;
   }
 
   /*
