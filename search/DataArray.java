@@ -179,6 +179,115 @@ public class DataArray {
     System.out.println("Search result of 4 is: " + tempDataArray.hashSearch(4));
   }
 
+  // Insertion sort. data[0] does not store a valid data.
+  public void insertionSort() {
+    DataNode tempNode;
+    int j;
+    for (int i = 2; i < length; i++) {
+      tempNode = data[i];
+      // Find the position to insert.
+      // At the same time, move other nodes.
+      for (j = i - 1; data[j].key > tempNode.key; j--)
+        data[j + 1] = data[j];
+      // Insert.
+      data[j + 1] = tempNode;
+
+      System.out.println("Round " + (i - 1));
+      System.out.println(this);
+    }
+  }
+
+  // Insertion sort test.
+  public static void insertionSortTest() {
+    int[] tempUnsortedKeys = { -100, 5, 3, 6, 10, 7, 1, 9 };
+    String[] tempContents = { "null", "if", "then", "else", "switch", "case", "for", "while" };
+    DataArray tempDataArray = new DataArray(tempUnsortedKeys, tempContents);
+
+    System.out.println(tempDataArray);
+
+    tempDataArray.insertionSort();
+    System.out.println("Result\r\n" + tempDataArray);
+  }
+
+  public void shellSort() {
+    DataNode tempNode;
+    int[] tempJumpArray = { 5, 3, 1 };
+    int tempJump;
+    int p;
+    for (int i = 0; i < tempJumpArray.length; i++) {
+      tempJump = tempJumpArray[i];
+      for (int j = 0; j < tempJump; j++) {
+        for (int k = j + tempJump; k < length; k += tempJump) {
+          tempNode = data[k];
+          // Find the position to insert.
+          // At the same time, move other nodes.
+          for (p = k - tempJump; p >= 0; p -= tempJump) {
+            if (data[p].key > tempNode.key)
+              data[p + tempJump] = data[p];
+            else
+              break;
+          }
+
+          // Insert
+          data[p + tempJump] = tempNode;
+        }
+      }
+      System.out.println("Round " + i);
+      System.out.println(this);
+    }
+  }
+
+  // Test the method.
+  public static void shellSortTest() {
+    int[] tempUnsortedKeys = { 5, 3, 6, 10, 7, 1, 9, 12, 8, 4 };
+    String[] tempContents = { "if", "then", "else", "switch", "case", "for", "while", "throw", "until", "do" };
+    DataArray tempDataArray = new DataArray(tempUnsortedKeys, tempContents);
+
+    System.out.println(tempDataArray);
+
+    tempDataArray.shellSort();
+    System.out.println("Result\r\n" + tempDataArray);
+  }
+
+  // Bubble sort.
+  public void bubbleSort() {
+    boolean tempSwapped;
+    DataNode tempNode;
+    for (int i = length - 1; i > 0; i--) {
+      tempSwapped = false;
+      for (int j = 0; j < i; j++) {
+        if (data[j].key > data[j + 1].key) {
+          // Swap.
+          tempNode = data[j + 1];
+          data[j + 1] = data[j];
+          data[j] = tempNode;
+
+          tempSwapped = true;
+        }
+      }
+
+      if (!tempSwapped) {
+        System.out.println("Premature.");
+        break;
+      }
+
+      System.out.println("Round " + (length - i));
+      System.out.println(this);
+    }
+  }
+
+  // Bubble sort test.
+  public static void bubbleSortTest() {
+    int[] tempUnsortedKeys = { 1, 3, 6, 10, 7, 5, 9 };
+    String[] tempStrings = { "if", "then", "else", "switch", "case", "for", "while" };
+    DataArray tempDataArray = new DataArray(tempUnsortedKeys, tempStrings);
+
+    System.out.println(tempDataArray);
+
+    tempDataArray.bubbleSort();
+    System.out.println("Result\r\n" + tempDataArray);
+  }
+
   public static void main(String args[]) {
     System.out.println("\r\n-------sequentialSearchTest-------");
     sequentialSearchTest();
@@ -188,5 +297,14 @@ public class DataArray {
 
     System.out.println("\r\n-------hashSearchTest-------");
     hashSearchTest();
+
+    System.out.println("\r\n-------insertionSortTest--------");
+    insertionSortTest();
+
+    System.out.println("\r\n-------shellSort-------");
+    shellSortTest();
+
+    System.out.println("\r\n-------bubbleSort-------");
+    bubbleSortTest();
   }
 }
