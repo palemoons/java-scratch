@@ -288,6 +288,265 @@ public class DataArray {
     System.out.println("Result\r\n" + tempDataArray);
   }
 
+  /*
+   * Quick sort recursively.
+   * 
+   * @param paraStart. The start index.
+   * 
+   * @param paraEnd. The end index.
+   */
+  public void quickSortRecursive(int paraStart, int paraEnd) {
+    // Nothing to sort.
+    if (paraStart >= paraEnd)
+      return;
+
+    int tempPivot = data[paraEnd].key;
+    DataNode tempNodeForSwap;
+    int tempLeft = paraStart;
+    int tempRight = paraEnd - 1;
+
+    // Find the position of the pivot.
+    while (true) {
+      while ((data[tempLeft].key < tempPivot) && (tempLeft < tempRight))
+        // Left side is ordered.
+        tempLeft++;
+      while ((data[tempRight].key > tempPivot) && (tempLeft < tempRight))
+        // Right side is ordered.
+        tempRight--;
+
+      if (tempLeft < tempRight) {
+        // Swap.
+        System.out.println("Swapping " + tempLeft + " and " + tempRight);
+        tempNodeForSwap = data[tempLeft];
+        data[tempLeft] = data[tempRight];
+        data[tempRight] = tempNodeForSwap;
+      } else {
+        break;
+      }
+    }
+
+    // Swap.
+    if (data[tempLeft].key > tempPivot) {
+      tempNodeForSwap = data[paraEnd];
+      data[paraEnd] = data[tempLeft];
+      data[tempLeft] = tempNodeForSwap;
+    } else {
+      tempLeft++;
+    }
+
+    System.out.println("From " + paraStart + " to " + paraEnd + ": ");
+    System.out.println(this);
+
+    quickSortRecursive(paraStart, tempLeft - 1);
+    quickSortRecursive(tempLeft + 1, paraEnd);
+  }
+
+  // Quick sort test.
+  public static void quickSortTest() {
+    int[] tempUnsortedKeys = { 1, 3, 12, 10, 5, 7, 9 };
+    String[] tempContents = { "if", "then", "else", "switch", "case", "for", "while" };
+    DataArray tempDataArray = new DataArray(tempUnsortedKeys, tempContents);
+
+    System.out.println(tempDataArray);
+
+    tempDataArray.quickSortRecursive(1, tempDataArray.length - 1);
+    System.out.println("Result\r\n" + tempDataArray);
+  }
+
+  // Selection sort.
+  public void selectionSort() {
+    DataNode tempNode;
+    int tempIndexForSmallest;
+
+    for (int i = 0; i < length - 1; i++) {
+      // Initialize.
+      tempNode = data[i];
+      tempIndexForSmallest = i;
+      for (int j = i + 1; j < length; j++) {
+        if (data[j].key < tempNode.key) {
+          tempNode = data[j];
+          tempIndexForSmallest = j;
+        }
+      }
+      // Swap.
+      data[tempIndexForSmallest] = data[i];
+      data[i] = tempNode;
+    }
+  }
+
+  // Selection sort test.
+  public static void selectionSortTest() {
+    int[] tempUnsortedKeys = { 5, 3, 6, 10, 7, 1, 9 };
+    String[] tempContents = { "if", "then", "else", "switch", "case", "for", "while" };
+    DataArray tempDataArray = new DataArray(tempUnsortedKeys, tempContents);
+
+    System.out.println(tempDataArray);
+
+    tempDataArray.selectionSort();
+    System.out.println("Result\r\n" + tempDataArray);
+  }
+
+  // Heap sort.
+  public void heapSort() {
+    DataNode tempNode;
+    // Step 1. Construct the initial heap.
+    for (int i = length / 2 - 1; i >= 0; i--)
+      adjustHeap(i, length);
+    System.out.println("The initial heap: " + this + "\r\n");
+
+    // Step 2. Swap and reconstruct.
+    for (int i = length - 1; i > 0; i--) {
+      tempNode = data[0];
+      data[0] = data[i];
+      data[i] = tempNode;
+
+      adjustHeap(0, i);
+      System.out.println("Round " + (length - i) + ": " + this);
+    }
+  }
+
+  /*
+   * Adjust the heap.
+   * 
+   * @param paraStart. The start of the index.
+   * 
+   * @param paraLength. The length of the adjust sequence.
+   */
+  public void adjustHeap(int paraStart, int paraLength) {
+    DataNode tempNode = data[paraStart];
+    int tempParent = paraStart;
+    int tempKey = data[paraStart].key;
+
+    for (int tempChild = paraStart * 2 + 1; tempChild < paraLength; tempChild = tempChild * 2 + 1) {
+      // The right child is bigger.
+      if (tempChild + 1 < paraLength && data[tempChild].key < data[tempChild + 1].key)
+        tempChild++;
+
+      System.out.println("The parent position is " + tempParent + " and the child is " + tempChild);
+      if (tempKey < data[tempChild].key) {
+        // The child is bigger.
+        data[tempParent] = data[tempChild];
+        System.out.println("Move " + data[tempChild].key + " to position " + tempParent);
+        tempParent = tempChild;
+      } else {
+        break;
+      }
+    }
+    data[tempParent] = tempNode;
+    System.out.println("Adjust " + paraStart + " to " + paraLength + ": " + this);
+  }
+
+  // Heap sort test.
+  public static void heapSortTest() {
+    int[] tempUnsortedKeys = { 5, 3, 6, 10, 7, 1, 9 };
+    String[] tempContents = { "if", "then", "else", "switch", "case", "for", "while" };
+    DataArray tempDataArray = new DataArray(tempUnsortedKeys, tempContents);
+
+    System.out.println(tempDataArray);
+
+    tempDataArray.heapSort();
+    System.out.println("Result\r\n" + tempDataArray);
+  }
+
+  // Merge sort. Results are stored in the member variable data.
+  public void mergeSort() {
+    // Step 1. Allocate space.
+    int tempRow;// The current row
+    int tempGroups;// Number of groups
+    int tempActualRow; // Only 0 or 1.
+    int tempNextRow = 0;
+    int tempGroupNumber;
+    int tempFirstStart, tempSecondStart, tempSecondEnd;
+    int tempFirstIndex, tempSecondIndex;
+    int tempNumCopied;
+    for (int i = 0; i < length; i++)
+      System.out.print(data[i]);
+    System.out.println();
+
+    DataNode[][] tempMatrix = new DataNode[2][length];
+
+    // Step 2. Copy data.
+    for (int i = 0; i < length; i++)
+      tempMatrix[0][i] = data[i];
+
+    // Step 3. Merge. log n rounds.
+    tempRow = -1;
+    for (int tempSize = 1; tempSize <= length; tempSize *= 2) {
+      // Reuse the space of the two rows.
+      tempRow++;
+      System.out.println("Current row = " + tempRow);
+      tempActualRow = tempRow % 2;
+      tempNextRow = (tempRow + 1) % 2;
+
+      tempGroups = length / (tempSize * 2);
+      if (length % (tempSize * 2) != 0)
+        tempGroups++;
+      System.out.println("tempSize = " + tempSize + ", numGroups = " + tempGroups);
+
+      for (tempGroupNumber = 0; tempGroupNumber < tempGroups; tempGroupNumber++) {
+        tempFirstStart = tempGroupNumber * tempSize * 2;
+        tempSecondStart = tempGroupNumber * tempSize * 2 + tempSize;
+        if (tempSecondStart > length - 1) {
+          // Copy the first part.
+          for (int i = tempFirstStart; i < length; i++)
+            tempMatrix[tempNextRow][i] = tempMatrix[tempActualRow][i];
+          continue;
+        }
+        tempSecondEnd = tempGroupNumber * tempSize * 2 + tempSize * 2 - 1;
+        if (tempSecondEnd > length - 1)
+          tempSecondEnd = length - 1;
+
+        System.out.println("Trying to merge [" + tempFirstStart + ", " + (tempSecondStart - 1) + "] with ["
+            + tempSecondStart + ", " + tempSecondEnd + "]");
+
+        tempFirstIndex = tempFirstStart;
+        tempSecondIndex = tempSecondStart;
+        tempNumCopied = 0;
+        while ((tempFirstIndex <= tempSecondStart - 1) && (tempSecondIndex <= tempSecondEnd)) {
+          if (tempMatrix[tempActualRow][tempFirstIndex].key <= tempMatrix[tempActualRow][tempSecondIndex].key) {
+            tempMatrix[tempNextRow][tempFirstStart + tempNumCopied] = tempMatrix[tempActualRow][tempFirstIndex];
+            tempFirstIndex++;
+            System.out.println("Copying " + tempMatrix[tempActualRow][tempFirstIndex]);
+          } else {
+            tempMatrix[tempNextRow][tempFirstStart + tempNumCopied] = tempMatrix[tempActualRow][tempSecondIndex];
+            System.out.println("Copying " + tempMatrix[tempActualRow][tempSecondIndex]);
+            tempSecondIndex++;
+          }
+          tempNumCopied++;
+        }
+
+        while (tempFirstIndex <= tempSecondStart - 1) {
+          tempMatrix[tempNextRow][tempFirstStart + tempNumCopied] = tempMatrix[tempActualRow][tempFirstIndex];
+          tempFirstIndex++;
+          tempNumCopied++;
+        }
+
+        while (tempSecondIndex < tempSecondEnd) {
+          tempMatrix[tempNextRow][tempFirstStart + tempNumCopied] = tempMatrix[tempActualRow][tempSecondIndex];
+          tempSecondIndex++;
+          tempNumCopied++;
+        }
+      }
+      System.out.println("Round " + tempRow);
+      for (int i = 0; i < length; i++)
+        System.out.println(tempMatrix[tempNextRow][i] + " ");
+      System.out.println();
+    }
+    data = tempMatrix[tempNextRow];
+  }
+
+  // Merge sort test.
+  public static void mergeSortTest(){
+    int[] tempUnsortedKeys = { 5, 3, 6, 10, 7, 1, 9 };
+    String[] tempContents = { "if", "then", "else", "switch", "case", "for", "while" };
+    DataArray tempDataArray = new DataArray(tempUnsortedKeys, tempContents);
+
+    System.out.println(tempDataArray);
+
+    tempDataArray.mergeSort();
+    System.out.println("Result\r\n" + tempDataArray);
+  }
+
   public static void main(String args[]) {
     System.out.println("\r\n-------sequentialSearchTest-------");
     sequentialSearchTest();
@@ -306,5 +565,17 @@ public class DataArray {
 
     System.out.println("\r\n-------bubbleSort-------");
     bubbleSortTest();
+
+    System.out.println("\r\n-------quickSort-------");
+    quickSortTest();
+
+    System.out.println("\r\n-------selectionSort-------");
+    selectionSortTest();
+
+    System.out.println("\r\n-------heapSort-------");
+    heapSortTest();
+
+    System.out.println("\r\n-------mergeSort-------");
+    mergeSortTest();
   }
 }
