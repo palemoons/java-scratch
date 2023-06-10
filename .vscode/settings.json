@@ -1,0 +1,10 @@
+{
+  "java.project.referencedLibraries": {
+    "include": [
+      "lib/**/*.jar",
+      "/Applications/weka-3.8.6.app/Contents/app/weka.jar",
+    ]
+  },
+  "java.project.explorer.showNonJavaResources": false,
+  "java.compile.nullAnalysis.mode": "automatic"
+}
