@@ -160,7 +160,37 @@ public class KMeans {
       }
 
       // Step 2.3. Update new centers.
-      updateVirtualCenters(tempNewCenters, tempClusterLengths);
+      for (int i = 0; i < tempNewCenters.length; i++)
+        for (int j = 0; j < tempNewCenters[0].length; j++)
+          tempNewCenters[i][j] /= tempClusterLengths[i];
+      int[] tempRealCenters = new int[numClusters];
+      // Initialize tempRealCenters.
+      for (int i = 0; i < numClusters; i++) {
+        int tempIndex = 0;
+        while (tempIndex < dataset.numInstances() && tempClusterArray[tempIndex] != i)
+          tempIndex++;
+        tempRealCenters[i] = tempIndex;
+      }
+      for (int i = 0; i < dataset.numInstances(); i++) {
+        int tempClusterIndex = tempClusterArray[i];
+        if (tempRealCenters[tempClusterIndex] >= dataset.numInstances())
+          continue;
+        if (distance(i, tempNewCenters[tempClusterIndex]) < distance(tempRealCenters[tempClusterIndex],
+            tempNewCenters[tempClusterIndex]))
+          tempRealCenters[tempClusterIndex] = i;
+      }
+      for (int i = 0; i < numClusters; i++) {
+        if (tempRealCenters[i] < dataset.numInstances())
+          for (int j = 0; j < dataset.numAttributes() - 1; j++)
+            tempNewCenters[i][j] = dataset.instance(tempRealCenters[i]).value(j);
+        else {
+          // Randomly choose a point as the new center.
+          System.out.println("Hit clustering failure.");
+          int tempIndex = random.nextInt(dataset.numInstances());
+          for (int j = 0; j < dataset.numAttributes() - 1; j++)
+            tempNewCenters[i][j] = dataset.instance(tempIndex).value(j);
+        }
+      }
 
       System.out.println("Now the new centers are: " + Arrays.deepToString(tempNewCenters));
       tempCenters = tempNewCenters;
@@ -176,30 +206,6 @@ public class KMeans {
       clusters[tempClusterArray[i]][tempCounters[tempClusterArray[i]]++] = i;
 
     System.out.println("The clusters are: " + Arrays.deepToString(clusters));
-  }
-
-  /*
-   * Calculate virtual centers
-   * 
-   * @param paraCenters. Array of cluster centers.
-   * 
-   * @param paraClustersLength. Array of cluster length.
-   */
-  public void updateVirtualCenters(double[][] paraCenters, int[] paraClustersLength) {
-    for (int i = 0; i < paraCenters.length; i++)
-      for (int j = 0; j < paraCenters[0].length; j++)
-        paraCenters[i][j] /= paraClustersLength[i];
-  }
-
-  /*
-   * Calculate real centers.
-   * 
-   * @param paraCenters. Array of cluster centers.
-   * 
-   * @param paraClustersLength. Array of cluster length.
-   */
-  public void updateRealCenters(double[][] paraCenters, int[] paraClustersLength) {
-    // TODO
   }
 
   /*
