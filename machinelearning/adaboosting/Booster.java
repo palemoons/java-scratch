@@ -183,17 +183,17 @@ public class Booster {
     return tempAccuracy;
   }
 
-  /* 
+  /*
    * For integration test.
    */
-  public static void main(String args[]){
+  public static void main(String args[]) {
     System.out.println("Starting AdaBoosting...");
-    Booster tempBooster=new Booster("./sample-data/iris.arff");
+    Booster tempBooster = new Booster("./sample-data/iris.arff");
 
-    tempBooster.setNumBaseClassifiers(100);
+    tempBooster.setNumBaseClassifiers(200);
     tempBooster.train();
 
-    System.out.println("The training accuracy is: "+tempBooster.computeTrainingAccuracy());
+    System.out.println("The training accuracy is: " + tempBooster.computeTrainingAccuracy());
     tempBooster.test();
   }
 }
