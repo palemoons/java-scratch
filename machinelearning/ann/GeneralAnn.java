@@ -77,7 +77,7 @@ public abstract class GeneralAnn {
    * @param paraTarget.
    *                    For 3-class data, it's [0, 0, 1], [0, 1, 0] or [1, 0, 0].
    */
-  public abstract void backProporation(double[] paraTarget);
+  public abstract void backPropagation(double[] paraTarget);
 
   /**
    * Train using the dataset.
@@ -96,7 +96,7 @@ public abstract class GeneralAnn {
 
       // Train with this instance.
       forward(tempInput);
-      backProporation(tempTarget);
+      backPropagation(tempTarget);
     }
   }
 
